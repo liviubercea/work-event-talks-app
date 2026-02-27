@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Talks Event Schedule</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
+        }
+
+        .search-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .search-container input[type="text"] {
+            width: 70%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .search-container input[type="text"]:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.2);
+        }
+
+        .schedule {
+            display: grid;
+            gap: 25px;
+        }
+
+        .talk-card, .break-card {
+            background-color: #fdfdfd;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .talk-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .break-card {
+            background-color: #ecf0f1;
+            border-left-color: #95a5a6;
+            text-align: center;
+            font-style: italic;
+            color: #555;
+        }
+
+        .talk-card h3 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .talk-card p {
+            margin: 5px 0;
+            font-size: 15px;
+            color: #666;
+        }
+
+        .talk-card .speakers {
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        .talk-card .categories span {
+            display: inline-block;
+            background-color: #e0f2f7;
+            color: #2980b9;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+
+        .talk-card .description {
+            margin-top: 15px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            font-size: 14px;
+        }
+
+        .time {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #e67e22; /* Orange color for times */
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #777;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .search-container input[type="text"] {
+                width: 90%;
+            }
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tech Talks: A Day of Innovation</h1>
+        <p style="text-align: center; font-size: 1.1em; color: #555;">Friday, February 27, 2026</p>
+
+        <div class="search-container">
+            <input type="text" id="categorySearch" placeholder="Search talks by category...">
+        </div>
+
+        <div class="schedule" id="scheduleContainer">
+            <!-- Talks and breaks will be rendered here by JavaScript -->
+        </div>
+
+        <footer>
+            &copy; 2026 Tech Talks Event. All rights reserved.
+        </footer>
+    </div>
+
+    <script>
+        const talksData = [
+            {
+                "type": "talk",
+                "id": "talk-1",
+                "title": "Talk 1: Future of Web",
+                "speakers": ["Speaker 1 A"],
+                "category": ["Web Development", "Frontend"],
+                "duration": "1 hour",
+                "description": "An insightful session covering the latest trends and best practices in Web Development, Frontend.",
+                "start": "10:00 AM",
+                "end": "11:00 AM"
+            },
+            {
+                "type": "talk",
+                "id": "talk-2",
+                "title": "Talk 2: Generative AI in Action",
+                "speakers": ["Speaker 2 A", "Speaker 2 B"],
+                "category": ["AI/ML", "Data Science"],
+                "duration": "1 hour",
+                "description": "An insightful session covering the latest trends and best practices in AI/ML, Data Science.",
+                "start": "11:10 AM",
+                "end": "12:10 PM"
+            },
+            {
+                "type": "talk",
+                "id": "talk-3",
+                "title": "Talk 3: Serverless Architectures",
+                "speakers": ["Speaker 3 A"],
+                "category": ["Cloud Computing", "DevOps", "Backend"],
+                "duration": "1 hour",
+                "description": "An insightful session covering the latest trends and best practices in Cloud Computing, DevOps, Backend.",
+                "start": "12:20 PM",
+                "end": "01:20 PM"
+            },
+            {
+                "type": "break",
+                "title": "Lunch Break",
+                "start": "01:20 PM",
+                "end": "02:20 PM",
+                "duration": "1 hour"
+            },
+            {
+                "type": "talk",
+                "id": "talk-4",
+                "title": "Talk 4: Future of Web",
+                "speakers": ["Speaker 4 A", "Speaker 4 B"],
+                "category": ["Web Development", "Frontend"],
+                "duration": "1 hour",
+                "description": "An insightful session covering the latest trends and best practices in Web Development, Frontend.",
+                "start": "02:20 PM",
+                "end": "03:20 PM"
+            },
+            {
+                "type": "talk",
+                "id": "talk-5",
+                "title": "Talk 5: Generative AI in Action",
+                "speakers": ["Speaker 5 A"],
+                "category": ["AI/ML", "Data Science"],
+                "duration": "1 hour",
+                "description": "An insightful session covering the latest trends and best practices in AI/ML, Data Science.",
+                "start": "03:30 PM",
+                "end": "04:30 PM"
+            },
+            {
+                "type": "talk",
+                "id": "talk-6",
+                "title": "Talk 6: Serverless Architectures",
+                "speakers": ["Speaker 6 A", "Speaker 6 B"],
+                "category": ["Cloud Computing", "DevOps", "Backend"],
+                "duration": "1 hour",
+                "description": "An insightful session covering the latest trends and best practices in Cloud Computing, DevOps, Backend.",
+                "start": "04:40 PM",
+                "end": "05:40 AM"
+            }
+        ];
+
+        const scheduleContainer = document.getElementById('scheduleContainer');
+        const categorySearchInput = document.getElementById('categorySearch');
+
+        function renderSchedule(filterTerm = '') {
+            scheduleContainer.innerHTML = ''; // Clear existing schedule
+
+            const lowerCaseFilterTerm = filterTerm.toLowerCase();
+
+            talksData.forEach(item => {
+                const isLunchBreak = item.type === 'break';
+                const matchesFilter = isLunchBreak || (
+                    item.category && item.category.some(cat => cat.toLowerCase().includes(lowerCaseFilterTerm))
+                );
+
+                if (matchesFilter) {
+                    const card = document.createElement('div');
+                    card.classList.add(isLunchBreak ? 'break-card' : 'talk-card');
+
+                    let content = `<span class="time">${item.start} - ${item.end}</span>`;
+
+                    if (isLunchBreak) {
+                        content += `<h3>${item.title}</h3>`;
+                        content += `<p>Duration: ${item.duration}</p>`;
+                    } else {
+                        content += `<h3>${item.title}</h3>`;
+                        content += `<p class="speakers">Speaker(s): ${item.speakers.join(', ')}</p>`;
+                        if (item.category && item.category.length > 0) {
+                            content += `<p class="categories">${item.category.map(cat => `<span>${cat}</span>`).join('')}</p>`;
+                        }
+                        content += `<p class="description">${item.description}</p>`;
+                    }
+                    card.innerHTML = content;
+                    scheduleContainer.appendChild(card);
+                }
+            });
+        }
+
+        // Initial render
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSchedule();
+        });
+
+        // Search functionality
+        categorySearchInput.addEventListener('keyup', (event) => {
+            renderSchedule(event.target.value);
+        });
+    </script>
+</body>
+</html>
